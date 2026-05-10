@@ -148,20 +148,31 @@ const priority = priorityMap[normalizedLabel] || "medium";
     lastAlertAtRef.current = now;
     lastLabelRef.current = normalizedLabel;
     lastLabelAtRef.current = now;
-      
-    // haptics
-    if (enableHaptics) {
-      try {
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-      } catch {}
+    
+  // haptics
+if (enableHaptics) {
+  try {
+    if (priority === "high") {
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+    } else if (priority === "medium") {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
+  } catch (e) {
+    console.log("Haptics error:", e);
+  }
+}
 
     // speech
-    if (enableSpeech) {
-      speak(label);
-    }
+if (enableSpeech) {
+  if (priority === "high") {
+    speak(`Warning: ${label}`);
+  } else if (priority === "medium") {
+    speak(label);
+  }
+}
   },
-  [speak]
+  
+  [speak] 
 );
 
   useEffect(() => {
