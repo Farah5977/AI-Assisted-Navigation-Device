@@ -162,12 +162,22 @@ if (enableHaptics) {
   }
 }
 
-    // speech
-if (enableSpeech) {
+    // speech messages
+  const speechMessages: Record<string, string> = {
+  person: "Person ahead",
+  car: "Vehicle nearby",
+  chair: "Chair detected",
+};
+
+const speechMessage =
+  speechMessages[normalizedLabel] || `${label} detected`;
+
+  //speech
+  if (enableSpeech) {
   if (priority === "high") {
-    speak(`Warning: ${label}`);
+    speak(speechMessage);
   } else if (priority === "medium") {
-    speak(label);
+    speak(speechMessage);
   }
 }
   },

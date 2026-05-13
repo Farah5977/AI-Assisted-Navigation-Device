@@ -178,17 +178,22 @@ function ModelWebView({ url, loading, onObjectDetected }: Props) {
       const msg = typeof raw === "string" ? JSON.parse(raw) : raw;
 
       if (msg?.type === "DETECTION" && typeof msg?.label === "string") {
-        onObjectDetected(msg.label, msg.confidence);
-        return;
-      }
+  const cleanLabel = msg.label.trim().toLowerCase();
+
+  const confidence =
+    typeof msg.confidence === "number" ? msg.confidence : undefined;
+
+  onObjectDetected(cleanLabel, confidence);
+  return;
+}
 
       if (typeof msg?.label === "string") {
-        onObjectDetected(msg.label);
-        return;
-      }
+  onObjectDetected(msg.label.trim().toLowerCase());
+  return;
+}
     } catch {
       if (typeof raw === "string") {
-        onObjectDetected(raw);
+       onObjectDetected(raw.trim().toLowerCase());
       }
     }
   };
